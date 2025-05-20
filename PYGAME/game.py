@@ -9,8 +9,8 @@ width, height = 1200, 800
 screen = pygame.display.set_mode((width, height))
 
 # background
-for i in (0,256):
-    background_colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+
+background_colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
 
 # picture
@@ -32,7 +32,7 @@ while running:
         
         if event.type == pygame.QUIT: #when pressing the X 
             running = False #actually quits the game and doesn't let it crash
-    screen.fill(i)
+    screen.fill(background_colour)
 
     screen.blit(picture, picture_rect)
     picture_rect = picture_rect.move(picture_speed)
