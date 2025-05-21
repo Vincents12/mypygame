@@ -11,6 +11,7 @@ picture = pygame.image.load("cat.png")
 picture = pygame.transform.scale(picture,(90,50))
 picture_rect = picture.get_rect()
 
+
 crosshair = pygame.image.load("crosshair.png")
 crosshair = pygame.transform.scale(crosshair,(30,30))
 crosshair_rect = crosshair.get_rect()

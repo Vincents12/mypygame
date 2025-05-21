@@ -1,7 +1,7 @@
 import pygame
 
 pygame.init()
-width, height = 400, 400
+width, height = 1200, 800
 screen = pygame.display.set_mode((width, height))
 
 rect_colour = 10,120,120
