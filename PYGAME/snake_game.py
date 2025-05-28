@@ -10,62 +10,72 @@ pink = 255, 0, 128
 
 #Initial screen stuff
 pygame.init()
-width, height = 720, 480
+width, height = 1200, 800
 pygame.display.set_caption('ICS3U/C1 Snake Game')
 screen = pygame.display.set_mode((width, height))
 
 #Snake Information
 snake_position = [360, 240]
-snake_speed = 27
+snake_speed = 10
 direction = 'RIGHT'
 snake_body = [[360,240],[350,240],[340,240],[330,240]]
 
 #Fruit!
 fruit_position = [random.randrange(0,(width//10))*10,random.randrange(0,(height//10))*10]
+super_fruit_position = [random.randrange(0,(width//10))*10,random.randrange(0,(height//10))*10]
 
-#Score
-score = float[0]
+FPS = pygame.time.Clock()
+score = 0
+
+random_color = random.choices(range(256), k=3)
+score1_colour = random.choices(range(256), k=3)
+
+
 
 def endgame():
     #Create font object
-    my_font = pygame.font.SysFont('comicsansms', 50)
-
+    my_font = pygame.font.SysFont('comicsansms', 40)
     #Create text surface
     game_over_surface = my_font.render('GAME OVER', True, red)
-
     #Create a rectangle object for the surface
     game_over_rect = game_over_surface.get_rect()
-
     #Position our game over object
     game_over_rect.center = [(width/2), (height/2)]
-
     #blit = draw surface onto rectangle
     screen.blit(game_over_surface, game_over_rect)
-
     pygame.display.flip() #Update screen
-
     time.sleep(0.5)
-
     #Deactivate the quit
     pygame.quit()
     quit()
 
 def win():
     #Create font object
-    my_font = pygame.font.SysFont('comicsansms', 50)
-    game_over_surface = my_font.render('WIN!', True, green)
-    game_over_rect = game_over_surface.get_rect()
-    game_over_rect.center = [(width/2), (height/2)]
-    screen.blit(game_over_surface, game_over_rect)
+    win_font = pygame.font.SysFont('comicsansms', 50)
+    win_surface = win_font.render('WIN!', True, green)
+    win_rect = win_surface.get_rect()
+    win_rect.center = [(width/2), (height/2)]
+    screen.blit(win_surface, win_rect)
     pygame.display.flip() #Update screen
     time.sleep(0.5)
 
 
 
+def scoring(score):
+    score_font = pygame.font.SysFont('comicsansms', 30)
+    score_surface = score_font.render('Score ' + str(score), True, red)
+    score_rect = score_surface.get_rect()
+    screen.blit(score_surface, score_rect)
+    pygame.display.flip()
+
 
 running = True
 while running:
+    FPS.tick(30)
+
     for event in pygame.event.get():
+        
+        
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
@@ -84,7 +94,10 @@ while running:
     for pos in snake_body:
         pygame.draw.rect(screen, blue, pygame.Rect(pos[0], pos[1], 10, 10))
     
-    pygame.draw.circle(screen, pink, (fruit_position[0]+5,fruit_position[1]+5), 5)
+    if random.random() < 0.3:
+        pygame.draw.circle(screen, random_color, (fruit_position[0]+5,fruit_position[1]+5), 5)
+    if random.random() < 0.5:
+        pygame.draw.circle(screen, pink, (fruit_position[0]+5,fruit_position[1]+5), 5)
 
     #Moving the snake
     if direction == 'RIGHT':
@@ -96,12 +109,28 @@ while running:
     if direction == 'DOWN':
         snake_position[1] += 10
 
+
     snake_body.insert(0, list(snake_position))
-    if snake_position[0] == fruit_position[0] and snake_position[1] == fruit_position[1]:
+
+    if snake_position == fruit_position:
         fruit_position = [random.randrange(0,(width//10))*10,
                           random.randrange(0,(height//10))*10]
+        score + 10 and snake_body.append([360,240])
+        
+        
     else:
         snake_body.pop()
+        
+        
+    if snake_position == super_fruit_position:
+        super_fruit_position = [random.randrange(0,(width//10))*10,
+                    random.randrange(0,(height//10))*10]
+        score = score =+ 100
+
+
+
+
+    scoring(score)
 
     pygame.display.flip()
     clock = pygame.time.Clock()
@@ -115,5 +144,10 @@ while running:
     for block in snake_body[1:]:
         if snake_body[0] == block[0] and snake_body[1] == block[1]:
             endgame()
+
+    if score == 200 or score > 200:
+        win()
+
+
 
 pygame.quit()
