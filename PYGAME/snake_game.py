@@ -7,7 +7,7 @@ green = 0, 255, 0
 red = 255, 0, 0
 blue = 0, 89, 255
 pink = 255, 0, 128
-
+score = 0
 #Initial screen stuff
 pygame.init()
 width, height = 1200, 800
@@ -22,13 +22,8 @@ snake_body = [[360,240],[350,240],[340,240],[330,240]]
 
 #Fruit!
 fruit_position = [random.randrange(0,(width//10))*10,random.randrange(0,(height//10))*10]
-super_fruit_position = [random.randrange(0,(width//10))*10,random.randrange(0,(height//10))*10]
 
 FPS = pygame.time.Clock()
-score = 0
-
-random_color = random.choices(range(256), k=3)
-score1_colour = random.choices(range(256), k=3)
 
 
 
@@ -63,7 +58,7 @@ def win():
 
 def scoring(score):
     score_font = pygame.font.SysFont('comicsansms', 30)
-    score_surface = score_font.render('Score ' + str(score), True, red)
+    score_surface = score_font.render('Score: ' + str(score), True, red)
     score_rect = score_surface.get_rect()
     screen.blit(score_surface, score_rect)
     pygame.display.flip()
@@ -94,10 +89,7 @@ while running:
     for pos in snake_body:
         pygame.draw.rect(screen, blue, pygame.Rect(pos[0], pos[1], 10, 10))
     
-    if random.random() < 0.3:
-        pygame.draw.circle(screen, random_color, (fruit_position[0]+5,fruit_position[1]+5), 5)
-    if random.random() < 0.5:
-        pygame.draw.circle(screen, pink, (fruit_position[0]+5,fruit_position[1]+5), 5)
+    pygame.draw.circle(screen, pink, (fruit_position[0]+5,fruit_position[1]+5), 5)
 
     #Moving the snake
     if direction == 'RIGHT':
@@ -115,19 +107,14 @@ while running:
     if snake_position == fruit_position:
         fruit_position = [random.randrange(0,(width//10))*10,
                           random.randrange(0,(height//10))*10]
-        score + 10 and snake_body.append([360,240])
+        score += 10
+        snake_body.append([360,240]) 
+        snake_speed += 2
         
         
     else:
         snake_body.pop()
         
-        
-    if snake_position == super_fruit_position:
-        super_fruit_position = [random.randrange(0,(width//10))*10,
-                    random.randrange(0,(height//10))*10]
-        score = score =+ 100
-
-
 
 
     scoring(score)
@@ -142,7 +129,7 @@ while running:
     if snake_position[1] < 0 or snake_position[1] >= height:
         endgame()
     for block in snake_body[1:]:
-        if snake_body[0] == block[0] and snake_body[1] == block[1]:
+        if snake_position[0] == block[0] and snake_position[1] == block[1]:
             endgame()
 
     if score == 200 or score > 200:
