@@ -8,6 +8,11 @@ pygame.init() #initialize a pygame classes
 width, height = 1200, 800
 screen = pygame.display.set_mode((width, height))
 
+# background
+
+background_colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+
+
 # picture
 picture = pygame.image.load("cat.png")
 picture = pygame.transform.scale(picture,(220,120))
@@ -31,6 +36,7 @@ while running:
         
         if event.type == pygame.QUIT: #when pressing the X 
             running = False #actually quits the game and doesn't let it crash
+    screen.fill(background_colour)
 
     # Change background color every frame
     background_colour = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
